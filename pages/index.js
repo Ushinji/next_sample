@@ -1,5 +1,11 @@
+import styled from "styled-components";
+
 export default () => (
   <div>
-    <h1>Next.js Page</h1>
+    <Title>Next.js Page</Title>
   </div>
 );
+
+const Title = styled.h1`
+  color: red;
+`;
