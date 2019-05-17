@@ -18,6 +18,8 @@
   },
   "devDependencies": {
     "@types/react": "^16.8.17",
-    "@zeit/next-typescript": "^1.1.1"
+    "@types/styled-components": "^4.1.15",
+    "@zeit/next-typescript": "^1.1.1",
+    "typescript-styled-plugin": "^0.14.0"
   }
 }

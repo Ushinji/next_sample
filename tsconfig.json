@@ -15,5 +15,10 @@
       "sourceMap": true,
       "strict": true,
       "target": "esnext"
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin"
+      }
+    ]
   }
