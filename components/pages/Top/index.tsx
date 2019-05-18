@@ -7,7 +7,7 @@ const P = styled.p``;
 const Top = () => {
   return (
     <Container>
-      <H1>IndexPage</H1>
+      <H1>TopPage</H1>
       <P>Next.js sample application.</P>
     </Container>
   );

@@ -1,4 +1,4 @@
-import Top from "../src/components/pages/RootPage";
+import Top from "components/pages/Top";
 
 const IndexPage = () => <Top />;
 
