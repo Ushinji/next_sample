@@ -25,5 +25,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/prefer-interface': 0,
+    'react/prop-types': 0,
   },
 };
