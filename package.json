@@ -7,8 +7,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "dev_server": "nodemon --watch 'src/**/*.ts' -e -ts --exec ts-node src/app.ts",
-    "lint": "npx eslint components/**/*.tsx pages/**/*.tsx src/**/*.ts",
+    "dev_server": "nodemon --watch 'server/**/*.ts' -e -ts --exec ts-node server/app.ts",
+    "lint": "npx eslint components/**/*.tsx pages/**/*.tsx server/**/*.ts",
     "precommit": "lint-staged"
   },
   "author": "",
