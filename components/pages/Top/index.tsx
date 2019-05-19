@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import * as React from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div``;
 const H1 = styled.h1``;
