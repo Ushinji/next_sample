@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { NextFC, NextContext } from 'next';
-
-type Project = {
-  id: number;
-  displayName: string;
-};
+import { getProject, Project } from '../queries/projectQuery';
 
 type Props = {
   project: Project;
@@ -27,10 +23,8 @@ const ProjectPage: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
 ProjectPage.getInitialProps = async ({
   query,
 }: ProjectPageContext): Promise<Props> => {
-  const project: Project = {
-    id: parseInt(query.id, 10),
-    displayName: `TEST_PROJECT_${query.id}`,
-  };
+  const id = parseInt(query.id, 10);
+  const project = await getProject(id);
   return { project };
 };
 
