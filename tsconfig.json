@@ -17,7 +17,7 @@
     "target": "esnext",
     "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"]
+      "@/*": ["*"]
     }
   },
   "plugins": [

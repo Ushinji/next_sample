@@ -1,12 +1,16 @@
 /* eslint-disable */
-const path = require('path');
+const webpackConfig = require('./webpack.config.js');
 const withTypescript = require('@zeit/next-typescript');
 
 module.exports = withTypescript({
-  webpack(config, options) {
-    config.resolve.extensions = ['.js', '.jsx', '.ts', '.tsx'];
-    config.resolve.alias['src'] = path.join(__dirname, 'src');
-    config.resolve.alias['components'] = path.join(__dirname, 'components');
+  webpack(config) {
+    const { baseAlias } = config.resolve;
+    const { alias, extensions } = webpackConfig.resolve;
+    config.resolve.alias = {
+      ...baseAlias,
+      ...alias
+    };
+    config.resolve.extensions = extensions;
     return config;
   },
 });
