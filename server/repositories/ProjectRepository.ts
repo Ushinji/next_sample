@@ -16,11 +16,10 @@ const projects = [
 ];
 
 class ProjectRepository {
-  public static getProject(id: number) {
+  public static findBy(id: number) {
     const index = projects.findIndex(p => p.id === id);
-    if (index === -1) {
-      return null;
-    }
+    if (index === -1) return undefined;
+
     const project = projects[index];
     return new ProjectEntity(project.id, project.displayName);
   }
