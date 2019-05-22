@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { NextFC, NextContext } from 'next';
 import styled from 'styled-components';
-import SidePannelModal from '../components/organisms/SidePannelModal';
-import { getProject, Project } from '../queries/projectQuery';
-import useBool from '../lib/useBool';
+import SidePannelModal from '../../components/organisms/SidePannelModal';
+import { getProject, Project } from '../../queries/projectQuery';
+import useBool from '../../lib/useBool';
 
 const Container = styled.div``;
 
