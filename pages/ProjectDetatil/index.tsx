@@ -13,7 +13,7 @@ type Props = {
 
 type ProjectPageContext = NextContext<{ id: string }>;
 
-const ProjectPage: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
+const ProjectDetatil: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
   const [isOpen, open, close] = useBool(false);
   return (
     <Container>
@@ -36,7 +36,7 @@ const ProjectPage: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
   );
 };
 
-ProjectPage.getInitialProps = async ({
+ProjectDetatil.getInitialProps = async ({
   query,
 }: ProjectPageContext): Promise<Props> => {
   const id = parseInt(query.id, 10);
@@ -44,4 +44,4 @@ ProjectPage.getInitialProps = async ({
   return { project };
 };
 
-export default ProjectPage;
+export default ProjectDetatil;

@@ -2,6 +2,6 @@
 const nextRoutes = require('next-routes');
 const routes = nextRoutes()
   .add('ProjectList', '/projects')
-  .add('project', '/projects/:id');
+  .add('ProjectDetatil', '/projects/:id');
 
 export default routes;
