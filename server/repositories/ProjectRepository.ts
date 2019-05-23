@@ -7,7 +7,7 @@ const projects = [
   },
   {
     id: 2,
-    displayName: 'TEST_PROJECT_1',
+    displayName: 'TEST_PROJECT_2',
   },
   {
     id: 3,
@@ -16,6 +16,12 @@ const projects = [
 ];
 
 class ProjectRepository {
+  public static findAll() {
+    return projects.map(project => {
+      return new ProjectEntity(project.id, project.displayName);
+    });
+  }
+
   public static findBy(id: number) {
     const index = projects.findIndex(p => p.id === id);
     if (index === -1) return undefined;
