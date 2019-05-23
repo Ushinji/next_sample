@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SidePannelModal from '@/components/organisms/SidePannelModal';
 import { getProject, Project } from '@/queries/projectQuery';
 import useBool from '@/lib/useBool';
+import Link from 'next/link';
 
 const Container = styled.div``;
 
@@ -32,6 +33,11 @@ const ProjectDetatil: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
           </button>
         </SidePannelModal>
       ) : null}
+      <div>
+        <Link href="/projects">
+          <a>戻る</a>
+        </Link>
+      </div>
     </Container>
   );
 };

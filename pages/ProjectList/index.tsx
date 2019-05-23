@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { NextFC } from 'next';
+import Link from 'next/link';
 import { getProjects, Project } from '@/queries/projectQuery';
 
 type Props = {
@@ -13,7 +14,13 @@ const ProjectList: NextFC<Props> = ({ projects }) => {
       <ul>
         {projects.map(project => {
           const key = `project-list-key-${project.id}`;
-          return <li key={key}>{project.displayName}</li>;
+          return (
+            <li key={key}>
+              <Link href={`/projects/${project.id}`}>
+                <a>{project.displayName}</a>
+              </Link>
+            </li>
+          );
         })}
       </ul>
     </div>
