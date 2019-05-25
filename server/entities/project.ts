@@ -1,7 +1,7 @@
 class ProjectEntity {
-  private id: number;
+  public id: number;
 
-  private displayName: string;
+  public displayName: string;
 
   public constructor(id: number, displayName: string) {
     this.id = id;

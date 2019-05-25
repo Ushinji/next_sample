@@ -29,6 +29,14 @@ class ProjectRepository {
     const project = projects[index];
     return new ProjectEntity(project.id, project.displayName);
   }
+
+  public static update(project: ProjectEntity) {
+    const index = projects.findIndex(p => p.id === project.id);
+    projects[index] = {
+      id: project.id,
+      displayName: project.displayName,
+    };
+  }
 }
 
 export default ProjectRepository;

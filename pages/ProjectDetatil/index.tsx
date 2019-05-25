@@ -5,6 +5,7 @@ import SidePannelModal from '@/components/organisms/SidePannelModal';
 import { getProject, Project } from '@/queries/projectQuery';
 import useBool from '@/lib/useBool';
 import Link from 'next/link';
+import { updateProject } from '@/commands/projectCommand';
 
 const Container = styled.div``;
 
@@ -14,15 +15,50 @@ type Props = {
 
 type ProjectPageContext = NextContext<{ id: string }>;
 
+const useEditProjectForm = (project: Project) => {
+  const [displayName, setDisplayName] = React.useState(project.displayName);
+
+  const onSubmit = React.useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (displayName) {
+        await updateProject(project.id, displayName);
+      }
+    },
+    [displayName, updateProject]
+  );
+
+  const onChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDisplayName(event.target.value);
+    },
+    [setDisplayName]
+  );
+
+  return {
+    displayNameInputParams: {
+      value: displayName,
+      onChange,
+    },
+    onSubmit,
+  };
+};
+
 const ProjectDetatil: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
   const [isOpen, open, close] = useBool(false);
+  const { displayNameInputParams, onSubmit } = useEditProjectForm(project);
   return (
     <Container>
       <h2>ProjectDetailPage</h2>
       <ul>
         <li>{`id: ${project.id}`}</li>
-        <li>{`displayName: ${project.displayName}`}</li>
       </ul>
+      <form onSubmit={onSubmit}>
+        <input {...displayNameInputParams} />
+        <button type="submit">編集する</button>
+      </form>
+
       <button type="button" onClick={open}>
         モーダルを開く
       </button>

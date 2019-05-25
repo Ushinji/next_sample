@@ -20,6 +20,24 @@ class ProjectController {
       ctx.status = 404;
     }
   }
+
+  public static async updateProject(ctx: BaseContext) {
+    const id = parseInt(ctx.params.id, 10);
+    const project = ProjectRepository.findBy(id);
+
+    if (!project) {
+      ctx.status = 404;
+      return;
+    }
+
+    const requestBody = ctx.body;
+    project.displayName = requestBody.displayName;
+
+    ProjectRepository.update(project);
+
+    ctx.status = 200;
+    ctx.body = project.toJson();
+  }
 }
 
 export default ProjectController;
