@@ -1,80 +1,68 @@
 import * as React from 'react';
 import { NextFC, NextContext } from 'next';
-import styled from 'styled-components';
-import SidePannelModal from '@/components/organisms/SidePannelModal';
-import { getProject, Project } from '@/queries/projectQuery';
-import useBool from '@/lib/useBool';
 import Link from 'next/link';
-import { updateProject } from '@/commands/projectCommand';
+import fetch from 'isomorphic-fetch';
+import { Project } from '@/queries/projectQuery';
+import useBool from '@/lib/useBool';
 
-const Container = styled.div``;
+const { useState, useEffect } = React;
+
+const useProject = (id: number) => {
+  useBool(true);
+  const [project, setProject] = useState<Project>();
+  const [isLoading, startLoading, finishLoading] = useBool(false);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      startLoading();
+      const res = await fetch(`http://localhost:4000/api/projects/${id}`);
+      finishLoading();
+
+      if (res.status === 404) {
+        setNotFound(true);
+        return;
+      }
+
+      if (!res.ok) {
+        setError(true);
+        return;
+      }
+
+      const fetchedProject = (await res.json()) as Project;
+      setProject(fetchedProject);
+    };
+
+    fetchProject();
+  }, [id]);
+
+  return { project, isLoading, notFound, error };
+};
 
 type Props = {
-  project: Project;
+  id: number;
 };
 
 type ProjectPageContext = NextContext<{ id: string }>;
 
-const useEditProjectForm = (project: Project) => {
-  const [displayName, setDisplayName] = React.useState(project.displayName);
+const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({ id }) => {
+  const { project, isLoading, notFound, error } = useProject(id);
 
-  const onSubmit = React.useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+  if (isLoading) return <div>Loading...</div>;
+  if (notFound) return <div>Project Not Found</div>;
+  if (error || !project) return <div>Error</div>;
 
-      if (displayName) {
-        await updateProject(project.id, displayName);
-      }
-    },
-    [displayName, updateProject]
-  );
-
-  const onChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDisplayName(event.target.value);
-    },
-    [setDisplayName]
-  );
-
-  return {
-    displayNameInputParams: {
-      value: displayName,
-      onChange,
-    },
-    onSubmit,
-  };
-};
-
-const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({ project }) => {
-  const [isOpen, open, close] = useBool(false);
-  const { displayNameInputParams, onSubmit } = useEditProjectForm(project);
   return (
-    <Container>
+    <div>
       <h2>ProjectDetailPage</h2>
       <ul>
         <li>{`id: ${project.id}`}</li>
       </ul>
-      <form onSubmit={onSubmit}>
-        <input {...displayNameInputParams} />
-        <button type="submit">編集する</button>
-      </form>
-
-      <button type="button" onClick={open}>
-        モーダルを開く
-      </button>
-      {isOpen ? (
-        <SidePannelModal>
-          <button type="button" onClick={close}>
-            モーダルを閉じる
-          </button>
-        </SidePannelModal>
-      ) : null}
-      <div>
-        <Link href="/projects">
-          <a>戻る</a>
-        </Link>
-      </div>
-    </Container>
+      <Link href="/projects">
+        <a>戻る</a>
+      </Link>
+    </div>
   );
 };
 
@@ -82,8 +70,7 @@ ProjectDetail.getInitialProps = async ({
   query,
 }: ProjectPageContext): Promise<Props> => {
   const id = parseInt(query.id, 10);
-  const project = await getProject(id);
-  return { project };
+  return { id };
 };
 
 export default ProjectDetail;
