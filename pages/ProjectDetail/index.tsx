@@ -1,66 +1,7 @@
 import * as React from 'react';
 import { NextFC, NextContext } from 'next';
 import Link from 'next/link';
-import fetch from 'isomorphic-fetch';
-import { Project } from '@/queries/projectQuery';
-import useBool from '@/lib/useBool';
-
-const { useState, useEffect } = React;
-
-type UseProjectState = {
-  project?: Project;
-  loading: boolean;
-  error: boolean;
-  notFound: boolean;
-};
-
-const useProject = (id: number) => {
-  useBool(true);
-  const [state, setState] = useState<UseProjectState>({
-    project: undefined,
-    loading: false,
-    error: false,
-    notFound: false,
-  });
-
-  const setPartialState = React.useCallback(partialState => {
-    setState(prevState => {
-      const nextState = Object.assign({}, prevState, partialState);
-      return nextState;
-    });
-  }, []);
-
-  useEffect(() => {
-    const fetchProject = async () => {
-      setPartialState({ loading: true });
-      const res = await fetch(`http://localhost:4000/api/projects/${id}`, {
-        mode: 'no-cors',
-      });
-
-      if (res.status === 404) {
-        setPartialState({ notFound: true, loading: false });
-        return;
-      }
-
-      if (!res.ok) {
-        setPartialState({ error: true, loading: false });
-        return;
-      }
-
-      const project = (await res.json()) as Project;
-      setPartialState({
-        project,
-        error: false,
-        loading: false,
-        notFound: false,
-      });
-    };
-
-    fetchProject();
-  }, [id]);
-
-  return { ...state };
-};
+import { useProject } from '@/queries/projectQuery';
 
 type Props = {
   id: number;
