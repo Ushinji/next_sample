@@ -7,37 +7,59 @@ import useBool from '@/lib/useBool';
 
 const { useState, useEffect } = React;
 
+type UseProjectState = {
+  project?: Project;
+  loading: boolean;
+  error: boolean;
+  notFound: boolean;
+};
+
 const useProject = (id: number) => {
   useBool(true);
-  const [project, setProject] = useState<Project>();
-  const [isLoading, startLoading, finishLoading] = useBool(false);
-  const [notFound, setNotFound] = useState(false);
-  const [error, setError] = useState(false);
+  const [state, setState] = useState<UseProjectState>({
+    project: undefined,
+    loading: false,
+    error: false,
+    notFound: false,
+  });
+
+  const setPartialState = React.useCallback(partialState => {
+    setState(prevState => {
+      const nextState = Object.assign({}, prevState, partialState);
+      return nextState;
+    });
+  }, []);
 
   useEffect(() => {
     const fetchProject = async () => {
-      startLoading();
-      const res = await fetch(`http://localhost:4000/api/projects/${id}`);
-      finishLoading();
+      setPartialState({ loading: true });
+      const res = await fetch(`http://localhost:4000/api/projects/${id}`, {
+        mode: 'no-cors',
+      });
 
       if (res.status === 404) {
-        setNotFound(true);
+        setPartialState({ notFound: true, loading: false });
         return;
       }
 
       if (!res.ok) {
-        setError(true);
+        setPartialState({ error: true, loading: false });
         return;
       }
 
-      const fetchedProject = (await res.json()) as Project;
-      setProject(fetchedProject);
+      const project = (await res.json()) as Project;
+      setPartialState({
+        project,
+        error: false,
+        loading: false,
+        notFound: false,
+      });
     };
 
     fetchProject();
   }, [id]);
 
-  return { project, isLoading, notFound, error };
+  return { ...state };
 };
 
 type Props = {
@@ -47,9 +69,9 @@ type Props = {
 type ProjectPageContext = NextContext<{ id: string }>;
 
 const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({ id }) => {
-  const { project, isLoading, notFound, error } = useProject(id);
+  const { project, loading, notFound, error } = useProject(id);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
   if (notFound) return <div>Project Not Found</div>;
   if (error || !project) return <div>Error</div>;
 
