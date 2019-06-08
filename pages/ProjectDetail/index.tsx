@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { NextFC, NextContext } from 'next';
 import Link from 'next/link';
-import { useProject } from '@/queries/projectQuery';
+import { getProject, Project } from '@/queries/projectQuery';
 
 type Props = {
-  id: number;
+  notFound: boolean;
+  error: boolean;
+  project?: Project;
 };
 
 type ProjectPageContext = NextContext<{ id: string }>;
 
-const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({ id }) => {
-  const { project, loading, notFound, error } = useProject(id);
-
-  if (loading) return <div>Loading...</div>;
+const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({
+  notFound,
+  error,
+  project,
+}) => {
   if (notFound) return <div>Project Not Found</div>;
   if (error || !project) return <div>Error</div>;
 
@@ -33,7 +36,8 @@ ProjectDetail.getInitialProps = async ({
   query,
 }: ProjectPageContext): Promise<Props> => {
   const id = parseInt(query.id, 10);
-  return { id };
+  const res = await getProject(id);
+  return { ...res };
 };
 
 export default ProjectDetail;

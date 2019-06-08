@@ -6,9 +6,36 @@ export type Project = {
   displayName: string;
 };
 
-export const getProject = async (id: number) => {
+type ResponceGetProject = {
+  notFound: boolean;
+  error: boolean;
+  project?: Project;
+};
+
+export const getProject = async (id: number): Promise<ResponceGetProject> => {
   const res = await fetch(`http://localhost:4000/api/projects/${id}`);
-  return (await res.json()) as Project;
+  if (res.status === 404) {
+    return {
+      notFound: true,
+      error: true,
+      project: undefined,
+    };
+  }
+
+  if (!res.ok) {
+    return {
+      notFound: false,
+      error: true,
+      project: undefined,
+    };
+  }
+
+  const project = (await res.json()) as Project;
+  return {
+    notFound: false,
+    error: false,
+    project,
+  };
 };
 
 export const getProjects = async () => {
