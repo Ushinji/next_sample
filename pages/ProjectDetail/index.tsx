@@ -2,6 +2,7 @@ import * as React from 'react';
 import { NextFC, NextContext } from 'next';
 import Link from 'next/link';
 import { getProject, Project } from '@/queries/projectQuery';
+import ProjectEditForm from '@/components/organisms/ProjectEditForm';
 
 type Props = {
   notFound: boolean;
@@ -21,10 +22,11 @@ const ProjectDetail: NextFC<Props, {}, ProjectPageContext> = ({
 
   return (
     <div>
-      <h2>ProjectDetailPage</h2>
+      <h1>プロジェクト詳細ページ</h1>
       <ul>
         <li>{`id: ${project.id}`}</li>
       </ul>
+      <ProjectEditForm project={project} />
       <Link href="/projects">
         <a>戻る</a>
       </Link>
